@@ -1,6 +1,7 @@
 "use client";
 
-import { Play, Lock, Unlock, Layers } from "lucide-react";
+import Link from "next/link";
+import { Play, Lock, Unlock, Layers, BookOpen } from "lucide-react";
 import { usePipelineStore } from "@/store/pipeline-store";
 import { cx } from "@/lib/utils";
 
@@ -88,6 +89,14 @@ export function Header() {
         <span className="hidden text-xs text-neutral-500 xl:inline">
           {shortcutKey()}+K to toggle · {shortcutKey()}+↵ to run
         </span>
+        <Link
+          href="/docs"
+          aria-label="Documentation"
+          className="flex items-center gap-1.5 rounded-md border border-neutral-800 bg-neutral-900 px-2 py-1.5 text-xs font-medium text-neutral-300 transition-colors duration-150 hover:cursor-pointer hover:border-neutral-700 hover:text-neutral-100 sm:px-2.5"
+        >
+          <BookOpen size={14} strokeWidth={1.75} />
+          <span className="hidden sm:inline">Docs</span>
+        </Link>
         <button
           onClick={() => run()}
           disabled={!canRun}
