@@ -51,7 +51,7 @@ export function PipelinePanel() {
 
   if (!mounted) {
     return (
-      <main className="flex flex-1 flex-col overflow-y-auto bg-neutral-950 p-6">
+      <main className="flex flex-1 flex-col bg-neutral-950 p-4 sm:p-6 lg:overflow-y-auto">
         <div className="mx-auto w-full max-w-2xl" />
       </main>
     );

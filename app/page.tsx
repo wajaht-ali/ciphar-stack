@@ -35,9 +35,9 @@ export default function Home() {
 
   return (
     <ToastProvider>
-      <div className="flex h-screen flex-col bg-neutral-950">
+      <div className="flex min-h-screen flex-col bg-neutral-950 lg:h-screen">
         <Header />
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1 flex-col lg:flex-row lg:overflow-hidden">
           <LibraryPanel />
           <PipelinePanel />
           <IOPanel />

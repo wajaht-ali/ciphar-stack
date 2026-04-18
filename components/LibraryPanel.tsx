@@ -20,7 +20,7 @@ function Section({
       <div className="px-1 text-xs font-medium uppercase tracking-wider text-neutral-500">
         {title}
       </div>
-      <div className="flex flex-col gap-1.5">{children}</div>
+      <div className="flex flex-wrap gap-1.5 lg:flex-col">{children}</div>
     </div>
   );
 }
@@ -68,14 +68,14 @@ export function LibraryPanel() {
   }
 
   return (
-    <aside className="flex w-[240px] shrink-0 flex-col gap-5 overflow-y-auto border-r border-neutral-800 bg-neutral-950 p-4 lg:w-[240px]">
+    <aside className="flex w-full shrink-0 flex-col gap-4 border-b border-neutral-800 bg-neutral-950 p-4 lg:w-[240px] lg:gap-5 lg:overflow-y-auto lg:border-b-0 lg:border-r">
       <Section title="Ciphers">
         {CIPHER_LIST.map((def) => (
           <button
             key={def.id}
             onClick={() => addNode(def.id)}
             title={def.description}
-            className="group flex items-center justify-between rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-left text-sm text-neutral-200 transition-colors duration-150 hover:border-neutral-700 hover:bg-neutral-850"
+            className="group flex items-center justify-between gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-left text-sm text-neutral-200 transition-colors duration-150 hover:cursor-pointer hover:border-neutral-700 hover:bg-neutral-850 lg:w-full"
           >
             <span>{def.label}</span>
             <Plus
@@ -93,11 +93,11 @@ export function LibraryPanel() {
             key={p.id}
             onClick={() => loadPreset(p.id)}
             title={p.description}
-            className="group flex items-center justify-between rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-left text-sm text-neutral-200 transition-colors duration-150 hover:border-neutral-700 hover:bg-neutral-850"
+            className="group flex items-center justify-between gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-left text-sm text-neutral-200 transition-colors duration-150 hover:cursor-pointer hover:border-neutral-700 hover:bg-neutral-850 lg:w-full"
           >
             <span className="flex flex-col">
               <span>{p.name}</span>
-              <span className="text-[11px] text-neutral-500">
+              <span className="hidden text-[11px] text-neutral-500 lg:inline">
                 {p.description}
               </span>
             </span>
@@ -113,17 +113,19 @@ export function LibraryPanel() {
       <Section title="Tools">
         <button
           onClick={handleExport}
-          className="flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm text-neutral-200 transition-colors duration-150 hover:border-neutral-700 hover:bg-neutral-850"
+          className="flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm text-neutral-200 transition-colors duration-150 hover:cursor-pointer hover:border-neutral-700 hover:bg-neutral-850 lg:w-full"
         >
           <Download size={14} strokeWidth={1.75} />
-          Export JSON
+          <span>Export</span>
+          <span className="hidden sm:inline">JSON</span>
         </button>
         <button
           onClick={handleImportClick}
-          className="flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm text-neutral-200 transition-colors duration-150 hover:border-neutral-700 hover:bg-neutral-850"
+          className="flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm text-neutral-200 transition-colors duration-150 hover:cursor-pointer hover:border-neutral-700 hover:bg-neutral-850 lg:w-full"
         >
           <Upload size={14} strokeWidth={1.75} />
-          Import JSON
+          <span>Import</span>
+          <span className="hidden sm:inline">JSON</span>
         </button>
         <input
           ref={fileRef}
@@ -134,10 +136,11 @@ export function LibraryPanel() {
         />
         <button
           onClick={() => clear()}
-          className="flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm text-neutral-400 transition-colors duration-150 hover:border-rose-500/40 hover:text-rose-300"
+          className="flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm text-neutral-400 transition-colors duration-150 hover:cursor-pointer hover:border-rose-500/40 hover:text-rose-300 lg:w-full"
         >
           <Trash2 size={14} strokeWidth={1.75} />
-          Clear pipeline
+          <span className="sm:hidden">Clear</span>
+          <span className="hidden sm:inline">Clear pipeline</span>
         </button>
       </Section>
     </aside>

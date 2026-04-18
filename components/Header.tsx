@@ -32,14 +32,16 @@ export function Header() {
       : `Run (${shortcutKey()}+Enter)`;
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between border-b border-neutral-800 bg-neutral-950/90 px-4 backdrop-blur">
-      <div className="flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-md border border-neutral-800 bg-neutral-900">
+    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-neutral-800 bg-neutral-950/90 px-3 backdrop-blur sm:h-16 sm:gap-3 sm:px-4">
+      <div className="flex min-w-0 items-center gap-2">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-neutral-800 bg-neutral-900">
           <Layers size={18} strokeWidth={1.75} className="text-emerald-400" />
         </div>
-        <div className="flex items-baseline gap-2">
-          <span className="text-xl font-semibold tracking-tight">CipherStack</span>
-          <span className="hidden text-xs text-neutral-500 sm:inline">
+        <div className="flex min-w-0 items-baseline gap-2">
+          <span className="truncate text-base font-semibold tracking-tight sm:text-xl">
+            CipherStack
+          </span>
+          <span className="hidden text-xs text-neutral-500 md:inline">
             Cascade encryption builder
           </span>
         </div>
@@ -53,52 +55,55 @@ export function Header() {
         <button
           role="tab"
           aria-selected={mode === "encrypt"}
+          aria-label="Encrypt mode"
           onClick={() => setMode("encrypt")}
           className={cx(
-            "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors duration-200",
+            "flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium transition-colors duration-200 hover:cursor-pointer sm:px-3",
             mode === "encrypt"
               ? "bg-emerald-500/15 text-emerald-300"
               : "text-neutral-400 hover:text-neutral-200",
           )}
         >
           <Lock size={14} strokeWidth={1.75} />
-          Encrypt
+          <span className="hidden sm:inline">Encrypt</span>
         </button>
         <button
           role="tab"
           aria-selected={mode === "decrypt"}
+          aria-label="Decrypt mode"
           onClick={() => setMode("decrypt")}
           className={cx(
-            "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors duration-200",
+            "flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium transition-colors duration-200 hover:cursor-pointer sm:px-3",
             mode === "decrypt"
               ? "bg-amber-500/15 text-amber-300"
               : "text-neutral-400 hover:text-neutral-200",
           )}
         >
           <Unlock size={14} strokeWidth={1.75} />
-          Decrypt
+          <span className="hidden sm:inline">Decrypt</span>
         </button>
       </div>
 
-      <div className="flex items-center gap-3">
-        <span className="hidden text-xs text-neutral-500 sm:inline">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <span className="hidden text-xs text-neutral-500 xl:inline">
           {shortcutKey()}+K to toggle · {shortcutKey()}+↵ to run
         </span>
         <button
           onClick={() => run()}
           disabled={!canRun}
           title={runTitle}
+          aria-label="Run pipeline"
           className={cx(
-            "flex items-center gap-2 rounded-md border px-3.5 py-1.5 text-sm font-medium transition-colors duration-200",
+            "flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-sm font-medium transition-colors duration-200 sm:gap-2 sm:px-3.5",
             canRun
               ? mode === "encrypt"
-                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20"
-                : "border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20"
-              : "cursor-not-allowed border-neutral-800 bg-neutral-900 text-neutral-600",
+                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 hover:cursor-pointer"
+                : "border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 hover:cursor-pointer"
+              : "cursor-not-allowed border-neutral-800 bg-neutral-900 text-neutral-600 hover:cursor-not-allowed",
           )}
         >
           <Play size={16} strokeWidth={1.75} />
-          {runStatus === "running" ? "Running…" : "Run"}
+          <span>{runStatus === "running" ? "Running…" : "Run"}</span>
         </button>
       </div>
     </header>

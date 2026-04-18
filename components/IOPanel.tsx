@@ -34,7 +34,7 @@ export function IOPanel() {
   const ciphertextEditable = mode === "decrypt";
 
   return (
-    <aside className="flex w-[320px] shrink-0 flex-col gap-4 overflow-y-auto border-l border-neutral-800 bg-neutral-950 p-4 lg:w-[320px]">
+    <aside className="flex w-full shrink-0 flex-col gap-4 border-t border-neutral-800 bg-neutral-950 p-4 lg:w-[320px] lg:overflow-y-auto lg:border-l lg:border-t-0">
       <Field
         label="Plaintext"
         icon={<Lock size={12} strokeWidth={1.75} />}
