@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CipherStack
 
-## Getting Started
+A browser-based **cascade encryption builder**. Chain cipher algorithms in
+sequence, feed in plaintext, and watch each layer transform the data. Run
+the pipeline in reverse to verify a clean round-trip back to the original.
 
-First, run the development server:
+Built for the **VYRO Hackathon 2026** (Frontend track).
+
+## Tech stack
+
+- **Next.js 16** (App Router, client-only page, Turbopack)
+- **React 19** + **TypeScript 5**
+- **Tailwind CSS 4** (zero config, inline `@theme` tokens)
+- **Zustand 5** (+ `persist` middleware for localStorage survival)
+- **@dnd-kit/core + sortable** (accessible drag-to-reorder)
+- **framer-motion** (layout/enter/exit animations + reduced-motion aware)
+- **lucide-react** (icons)
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How it works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Pick ciphers from the **Library** on the left to add nodes to the pipeline.
+2. Configure each node inline (shift, keyword, key — depending on cipher).
+3. Drag the grip handle to reorder; click the × to remove.
+4. Type in the **Plaintext** box on the right and hit **Run** (or ⌘/Ctrl+↵).
+5. Toggle to **Decrypt** (⌘/Ctrl+K) and hit Run again — the pipeline runs in
+   reverse with inverse operations, and a **Round-trip verified** badge
+   appears in emerald if the recovered plaintext matches.
 
-## Learn More
+Every node card shows its intermediate `in:` and `out:` after each run, so
+you can see data flow through the cascade.
 
-To learn more about Next.js, take a look at the following resources:
+## Cipher library
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Cipher    | Configurable | Inverse                                |
+|-----------|--------------|----------------------------------------|
+| Caesar    | shift (-25..25) | Shift by `-shift`                   |
+| Vigenère  | keyword (a-z)   | Subtract keyword shifts             |
+| XOR       | key (string)    | Same XOR (hex in / hex out for chain safety) |
+| Reverse   | —               | Self-inverse                        |
+| Base64    | —               | Standard decode (UTF-8 safe)        |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+New ciphers plug in by adding a file under `lib/ciphers/` and registering
+it in `lib/ciphers/index.ts`. No other files need to change.
 
-## Deploy on Vercel
+## Architecture notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The cipher engine is a **registry of `CipherDef` objects**, each exposing a
+uniform `{ encrypt, decrypt, validateConfig, defaultConfig }` contract
+(`lib/ciphers/types.ts`). A small **pipeline orchestrator**
+(`lib/pipeline.ts`) runs the chain in order for encrypt and in reverse with
+inverse operations for decrypt, returning a `trace` of `{ in, out }` pairs
+the UI stitches back onto each node card. State lives in a single **Zustand
+store** (`store/pipeline-store.ts`) that owns nodes, mode, plaintext,
+ciphertext, and the round-trip verification flag — persisted to
+`localStorage` so a refresh keeps the pipeline intact.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Keyboard shortcuts
+
+- **⌘/Ctrl + Enter** — Run the pipeline
+- **⌘/Ctrl + K** — Toggle Encrypt ⇄ Decrypt
+
+## Not a security product
+
+The ciphers here are implemented for demonstration. They are not suitable
+for protecting real data. The point is to make cascade encryption *visible*.
